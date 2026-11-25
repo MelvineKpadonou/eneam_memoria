@@ -3,63 +3,34 @@
 namespace App\Http\Controllers;
 
 use App\Models\Favori;
+use App\Models\Memoire;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class FavoriController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): View
     {
-        //
+        return view('Favoris.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(Request $request, Memoire $memoire): RedirectResponse
     {
-        //
+        Favori::firstOrCreate([
+            'user_id' => $request->user()->id,
+            'memoire_id' => $memoire->id,
+        ]);
+
+        return redirect()->route('favoris.index');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function destroy(Request $request, Memoire $memoire): RedirectResponse
     {
-        //
-    }
+        Favori::where('user_id', $request->user()->id)
+            ->where('memoire_id', $memoire->id)
+            ->delete();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Favori $favori)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Favori $favori)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Favori $favori)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Favori $favori)
-    {
-        //
+        return redirect()->route('favoris.index');
     }
 }

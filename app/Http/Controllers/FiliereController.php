@@ -3,63 +3,43 @@
 namespace App\Http\Controllers;
 
 use App\Models\Filiere;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class FiliereController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): View
     {
-        //
+        return view('Admin.Filieres.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function create(): View
     {
-        //
+        return view('Admin.Filieres.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(): RedirectResponse
     {
-        //
+        return redirect()->route('admin.filieres.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Filiere $filiere)
+    public function show(Filiere $filiere): RedirectResponse
     {
-        //
+        return redirect()->route('admin.filieres.index');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Filiere $filiere)
+    public function edit(Filiere $filiere): View
     {
-        //
+        return view('Admin.Filieres.edit', ['filiere' => $filiere]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Filiere $filiere)
+    public function update(Filiere $filiere): RedirectResponse
     {
-        //
+        return redirect()->route('admin.filieres.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Filiere $filiere)
+    public function destroy(Filiere $filiere): RedirectResponse
     {
-        //
+        return redirect()->route('admin.filieres.index');
     }
 }

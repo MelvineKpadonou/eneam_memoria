@@ -1,5 +1,5 @@
 <div class="app-header header-shadow">
-    @include('layouts.partials.logo')
+    @include('layouts.logo')
 
     <div class="app-header__content">
 
@@ -38,10 +38,11 @@
                                 <div class="btn-group">
                                     <a data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
                                         <img width="42" class="rounded-circle"
-                                             src="{{ asset('architectui/assets/images/avatars/1.jpg') }}" alt="">
+                                            src="{{ asset('architectui/assets/images/avatars/1.jpg') }}" alt="">
                                         <i class="fa fa-angle-down ms-2 opacity-8"></i>
                                     </a>
-                                    <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
+                                    <div tabindex="-1" role="menu" aria-hidden="true"
+                                        class="dropdown-menu dropdown-menu-right">
                                         <form method="POST" action="{{ route('logout') }}">
                                             @csrf
                                             <button type="submit" class="dropdown-item">Se déconnecter</button>
@@ -50,7 +51,7 @@
                                 </div>
                             </div>
                             <div class="widget-content-left ms-3 header-user-info">
-                                <div class="widget-heading">{{ auth()->user()->name }}</div>
+                                <div class="widget-heading">{{ auth()->user()->nom }}</div>
                                 <div class="widget-subheading">{{ ucfirst(auth()->user()->role) }}</div>
                             </div>
                         </div>

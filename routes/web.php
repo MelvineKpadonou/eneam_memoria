@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/mes-memoires', [MemoireController::class, 'mesMemoires'])->name('memoires.mes');
 
     // Favoris et historique de lecture
+    // Favoris et historique de lecture
     Route::get('/favoris', [FavoriController::class, 'index'])->name('favoris.index');
     Route::post('/favoris/{memoire}', [FavoriController::class, 'store'])->name('favoris.store');
     Route::delete('/favoris/{memoire}', [FavoriController::class, 'destroy'])->name('favoris.destroy');
@@ -53,3 +54,5 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('mots-cles', MotCleController::class);
     Route::get('/statistiques', [StatistiqueController::class, 'index'])->name('statistiques');
 });
+
+require __DIR__.'/auth.php';
