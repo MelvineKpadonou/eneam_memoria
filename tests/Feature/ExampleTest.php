@@ -1,7 +1,5 @@
 <?php
 
-test('the application returns a successful response', function () {
-    $response = $this->get('/');
-
-    $response->assertStatus(200);
+it('redirige la racine vers le catalogue', function () {
+    $this->get('/')->assertRedirect(route('memoires.index'));
 });

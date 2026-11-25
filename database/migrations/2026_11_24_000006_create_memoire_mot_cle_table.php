@@ -5,7 +5,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 // Table de liaison de l'association plusieurs-à-plusieurs Memoire <-> MotCle
-return new class extends Migration {
+return new class extends Migration
+{
     public function up(): void
     {
         Schema::create('memoire_mot_cle', function (Blueprint $table) {

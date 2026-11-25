@@ -5,7 +5,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 // Association plusieurs-à-plusieurs User <-> Memoire (clé primaire composée, comme dans le diagramme)
-return new class extends Migration {
+return new class extends Migration
+{
     public function up(): void
     {
         Schema::create('favoris', function (Blueprint $table) {
