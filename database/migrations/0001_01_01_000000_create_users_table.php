@@ -15,15 +15,9 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('nom');
-            $table->string('prenom');
-            $table->string('matricule')->unique();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('role');
             $table->string('password');
-
-            $table->foreignId('filiere_id')->nullable()->constrained('filieres')->onDelete('set null');
-
             $table->rememberToken();
             $table->timestamps();
         });

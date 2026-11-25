@@ -1,5 +1,5 @@
 <?php
 
-test('the application redirects guests to the memoires catalog', function () {
+it('redirige la racine vers le catalogue', function () {
     $this->get('/')->assertRedirect(route('memoires.index'));
 });

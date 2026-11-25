@@ -2,13 +2,18 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    protected $fillable = ['nom', 'prenom', 'matricule', 'email', 'role', 'filiere_id'];
+    use HasFactory;
+    use Notifiable;
+
+    protected $fillable = ['nom', 'prenom', 'matricule', 'email', 'password', 'role', 'filiere_id'];
 
     protected $hidden = ['password', 'remember_token'];
 
@@ -23,7 +28,7 @@ class User extends Authenticatable
 
     public function memoires(): HasMany
     {
-        return $this->hasMany(Memoire::class, 'etudiant_id');
+        return $this->hasMany(Memoire::class, 'auteur_id');
     }
 
     public function consultations(): HasMany

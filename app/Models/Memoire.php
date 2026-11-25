@@ -8,11 +8,35 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Memoire extends Model
 {
-    protected $fillable = ['titre', 'resume', 'contenu', 'filiere_id', 'annee_academique_id', 'etudiant_id'];
+    protected $fillable = [
+        'titre',
+        'resume',
+        'fichier_path',
+        'statut',
+        'motif_rejet',
+        'acces_restreint',
+        'telechargement_autorise',
+        'date_embargo',
+        'auteur_id',
+        'encadreur_id',
+        'filiere_id',
+        'annee_academique_id',
+    ];
 
-    public function etudiant(): BelongsTo
+    protected $casts = [
+        'acces_restreint' => 'boolean',
+        'telechargement_autorise' => 'boolean',
+        'date_embargo' => 'date',
+    ];
+
+    public function auteur(): BelongsTo
     {
-        return $this->belongsTo('App\Models\User', 'etudiant_id');
+        return $this->belongsTo(User::class, 'auteur_id');
+    }
+
+    public function encadreur(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'encadreur_id');
     }
 
     public function filiere(): BelongsTo

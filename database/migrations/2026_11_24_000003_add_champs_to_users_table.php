@@ -8,12 +8,10 @@ use Illuminate\Support\Facades\Schema;
  * Adapte la table "users" de Laravel à la classe User du diagramme :
  * name devient nom, et on ajoute prenom, matricule, role, filiere_id.
  */
-return new class extends Migration {
+return new class extends Migration
+{
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->renameColumn('name', 'nom');
-        });
 
         Schema::table('users', function (Blueprint $table) {
             // nullable : pour ne pas bloquer les comptes déjà créés

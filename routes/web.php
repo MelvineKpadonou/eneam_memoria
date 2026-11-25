@@ -1,43 +1,44 @@
 <?php
 
+use App\Http\Controllers\AnneeAcademiqueController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FavoriController;
+use App\Http\Controllers\FiliereController;
+use App\Http\Controllers\HistoriqueController;
+use App\Http\Controllers\MemoireController;
+use App\Http\Controllers\MotCleController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StatistiqueController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ValidateurController;
+use App\Http\Controllers\ValidationMemoireController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{
-    DashboardController, MemoireController, MotCleController,
-    AnneeAcademiqueController, FiliereController, FavoriController,
-    HistoriqueController, ValidateurController, ValidationMemoireController,
-    UserController, StatistiqueController
-};
 
-// ---------- Pages accessibles sans connexion ----------
-// (la connexion et l'inscription sont dans routes/auth.php si tu utilises Breeze)
 Route::get('/', function () {
     return redirect()->route('memoires.index');
 });
 
-// ---------- Il faut être connecté ----------
 Route::middleware('auth')->group(function () {
-
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Catalogue : liste, fiche, dépôt, modification, suppression
     Route::resource('memoires', MemoireController::class);
 
-    // Lecture en ligne (PDF.js) et téléchargement
     Route::get('/memoires/{memoire}/lire', [MemoireController::class, 'lire'])->name('memoires.lire');
     Route::get('/memoires/{memoire}/telecharger', [MemoireController::class, 'telecharger'])->name('memoires.telecharger');
+    Route::get('/memoires/{memoire}/fichier', [MemoireController::class, 'fichier'])->name('memoires.fichier');
 
-    // Mes dépôts (suivi du statut côté étudiant)
     Route::get('/mes-memoires', [MemoireController::class, 'mesMemoires'])->name('memoires.mes');
 
-    // Favoris et historique de lecture
-    // Favoris et historique de lecture
     Route::get('/favoris', [FavoriController::class, 'index'])->name('favoris.index');
     Route::post('/favoris/{memoire}', [FavoriController::class, 'store'])->name('favoris.store');
     Route::delete('/favoris/{memoire}', [FavoriController::class, 'destroy'])->name('favoris.destroy');
     Route::get('/historique', [HistoriqueController::class, 'index'])->name('historique.index');
+
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// ---------- Validateur (et admin) ----------
 Route::middleware(['auth'])->prefix('validateur')->name('validateur.')->group(function () {
     Route::get('/', [ValidateurController::class, 'index'])->name('index');
     Route::get('/memoires/{memoire}', [ValidationMemoireController::class, 'show'])->name('show');
@@ -46,7 +47,6 @@ Route::middleware(['auth'])->prefix('validateur')->name('validateur.')->group(fu
     Route::post('/memoires/{memoire}/rejeter', [ValidationMemoireController::class, 'rejeter'])->name('rejeter');
 });
 
-// ---------- Administrateur ----------
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('filieres', FiliereController::class);
