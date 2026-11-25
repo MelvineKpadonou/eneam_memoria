@@ -1,5 +1,5 @@
 <div class="app-header__logo">
-    <div class="logo-src"></div>
+    <span class="eneam-logo">ENEAM MEMORIA</span>
     <div class="header__pane ms-auto">
         <div>
             <button type="button" class="hamburger close-sidebar-btn hamburger--elastic" data-class="closed-sidebar">

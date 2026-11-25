@@ -8,6 +8,11 @@ test('la page de connexion se rend', function () {
         ->assertSee('ENEAM');
 });
 
+test('le tableau de bord redirige les invites vers la connexion', function () {
+    $this->get(route('dashboard'))
+        ->assertRedirect(route('login'));
+});
+
 test('le tableau de bord se rend pour un utilisateur connecte', function () {
     $user = new User([
         'nom' => 'Admin',

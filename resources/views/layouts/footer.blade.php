@@ -4,7 +4,7 @@
             <div class="app-footer-left">
                 <ul class="nav">
                     <li class="nav-item">
-                        <span class="nav-link">© {{ date('Y') }} ENEAM - Bibliothèque des mémoires</span>
+                        <span class="nav-link">© {{ date('Y') }} ENEAM MEMORIA - Bibliothèque des mémoires</span>
                     </li>
                 </ul>
             </div>
