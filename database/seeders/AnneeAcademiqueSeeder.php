@@ -12,5 +12,6 @@ class AnneeAcademiqueSeeder extends Seeder
     public function run(): void
     {
         //
+        
     }
 }
