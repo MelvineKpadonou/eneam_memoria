@@ -3,43 +3,41 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function index(): View
+    public function index()
     {
-        return view('Admin.Users.index');
+        // On récupère uniquement les étudiants non vérifiés
+        $usersEnAttente = User::where('role_verifie', false)
+            ->whereIn('role', ['lecteur', 'auteur'])
+            ->latest()
+            ->paginate(15);
+
+        return view('admin.users.index', compact('usersEnAttente'));
     }
 
-    public function create(): View
+    public function valider(User $user)
     {
-        return view('Admin.Users.create');
+        // L'admin valide le rôle déclaré
+        $user->update(['role_verifie' => true]);
+
+        return back()->with('success', "Le rôle de {$user->nom} {$user->prenom} a été validé.");
     }
 
-    public function store(): RedirectResponse
+    public function changerRole(Request $request, User $user)
     {
-        return redirect()->route('admin.users.index');
-    }
+        // L'admin change le rôle (si l'étudiant a menti)
+        $request->validate([
+            'nouveau_role' => 'required|in:lecteur,auteur',
+        ]);
 
-    public function show(User $user): RedirectResponse
-    {
-        return redirect()->route('admin.users.index');
-    }
+        $user->update([
+            'role' => $request->nouveau_role,
+            'role_verifie' => true,
+        ]);
 
-    public function edit(User $user): View
-    {
-        return view('Admin.Users.edit', ['user' => $user]);
-    }
-
-    public function update(User $user): RedirectResponse
-    {
-        return redirect()->route('admin.users.index');
-    }
-
-    public function destroy(User $user): RedirectResponse
-    {
-        return redirect()->route('admin.users.index');
+        return back()->with('success', 'Rôle modifié et vérifié.');
     }
 }

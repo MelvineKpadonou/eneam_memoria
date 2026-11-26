@@ -58,4 +58,9 @@ class Memoire extends Model
     {
         return $this->hasMany(Consultation::class);
     }
+
+    public function motCles()
+    {
+        return $this->belongsToMany(MotCle::class, 'memoire_mot_cle', 'memoire_id', 'mot_cle_id');
+    }
 }

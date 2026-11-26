@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\AnneeAcademiqueController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FavoriController;
 use App\Http\Controllers\FiliereController;
 use App\Http\Controllers\HistoriqueController;
@@ -14,19 +13,25 @@ use App\Http\Controllers\ValidateurController;
 use App\Http\Controllers\ValidationMemoireController;
 use Illuminate\Support\Facades\Route;
 
+// 1. Page d'accueil pour les VISITEURS (non connectés)
 Route::get('/', function () {
-    return redirect()->route('memoires.index');
-});
+    return auth()->check()
+        ? redirect()->route('memoires.index')
+        : view('home');
+})->name('home');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+// 2. Routes pour les utilisateurs CONNECTÉS
+Route::middleware(['auth', 'CheckStudentProfile'])->group(function () {
+
+    // Page d'accueil après connexion (étudiants)
+    Route::get('/welcome', function () {
+        return view('welcome'); // welcome.blade.php est la page connectée
+    })->name('welcome');
 
     Route::resource('memoires', MemoireController::class);
-
     Route::get('/memoires/{memoire}/lire', [MemoireController::class, 'lire'])->name('memoires.lire');
     Route::get('/memoires/{memoire}/telecharger', [MemoireController::class, 'telecharger'])->name('memoires.telecharger');
     Route::get('/memoires/{memoire}/fichier', [MemoireController::class, 'fichier'])->name('memoires.fichier');
-
     Route::get('/mes-memoires', [MemoireController::class, 'mesMemoires'])->name('memoires.mes');
 
     Route::get('/favoris', [FavoriController::class, 'index'])->name('favoris.index');
@@ -39,7 +44,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth'])->prefix('validateur')->name('validateur.')->group(function () {
+Route::middleware(['auth', 'RedirectIfRole:validateur'])->prefix('validateur')->name('validateur.')->group(function () {
     Route::get('/', [ValidateurController::class, 'index'])->name('index');
     Route::get('/memoires/{memoire}', [ValidationMemoireController::class, 'show'])->name('show');
     Route::post('/memoires/{memoire}/prendre', [ValidationMemoireController::class, 'prendreEnCharge'])->name('prendre');
@@ -47,8 +52,10 @@ Route::middleware(['auth'])->prefix('validateur')->name('validateur.')->group(fu
     Route::post('/memoires/{memoire}/rejeter', [ValidationMemoireController::class, 'rejeter'])->name('rejeter');
 });
 
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
-    Route::resource('users', UserController::class);
+Route::middleware(['auth', 'RedirectIfRole:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::patch('/users/{user}/valider', [UserController::class, 'valider'])->name('users.valider');
+    Route::patch('/users/{user}/changer-role', [UserController::class, 'changerRole'])->name('users.changerRole');
     Route::resource('filieres', FiliereController::class);
     Route::resource('annees', AnneeAcademiqueController::class);
     Route::resource('mots-cles', MotCleController::class);

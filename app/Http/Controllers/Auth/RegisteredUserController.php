@@ -3,54 +3,66 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\AdminAutorise;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
-use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
     /**
-     * Display the registration view.
+     * Affiche le formulaire d'inscription.
      */
     public function create(): View
     {
-        return view('Auth.register');
+        return view('auth.register');
     }
 
     /**
-     * Handle an incoming registration request.
-     *
-     * @throws ValidationException
+     * Traite la demande d'inscription.
      */
     public function store(Request $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'nom' => ['required', 'string', 'max:255'],
-            'prenom' => ['required', 'string', 'max:255'],
-            'matricule' => ['required', 'string', 'max:255', 'unique:users,matricule'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        // 1. Validation
+        $request->validate([
+            'nom' => 'required|string|max:255',
+            'prenom' => 'required|string|max:255',
+            'matricule' => 'required|string|unique:users',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|confirmed|min:8',
+            'role_demande' => 'required|in:lecteur,auteur',
         ]);
 
-        $user = User::create([
-            'nom' => $validated['nom'],
-            'prenom' => $validated['prenom'],
-            'matricule' => $validated['matricule'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'role' => 'etudiant',
+        $role = 'etudiant';
+        $roleVerifie = false; // Par défaut, en attente de vérification
+
+        // 2. Cas spécial : Admin ou Validateur (Whitelist)
+        $autorisation = AdminAutorise::where('email', $request->email)->first();
+
+        if ($autorisation) {
+            $role = $autorisation->role; // 'admin' ou 'validateur'
+            $roleVerifie = true; // Les admins sont vérifiés d'office
+        } else {
+            // 3. Cas Étudiant : on prend ce qu'il a déclaré
+            $role = $request->role_demande; // 'lecteur' ou 'auteur'
+            $roleVerifie = false; // En attente de vérification par l'admin
+        }
+
+        // 4. Création de l'utilisateur
+        User::create([
+            'nom' => $request->nom,
+            'prenom' => $request->prenom,
+            'matricule' => $request->matricule,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => $role,
+            'role_verifie' => $roleVerifie,
+            'filiere_id' => $request->filiere_id ?? null,
         ]);
 
-        event(new Registered($user));
-
-        Auth::login($user);
-
-        return redirect(route('dashboard', absolute: false));
+        return redirect()->route('login')
+            ->with('success', 'Compte créé avec succès ! Un administrateur vérifiera votre rôle sous peu.');
     }
 }

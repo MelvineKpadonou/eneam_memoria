@@ -13,12 +13,13 @@ class User extends Authenticatable
     use HasFactory;
     use Notifiable;
 
-    protected $fillable = ['nom', 'prenom', 'matricule', 'email', 'password', 'role', 'filiere_id'];
+    protected $fillable = ['nom', 'prenom', 'matricule', 'email', 'password', 'role', 'role_verifie', 'filiere_id'];
 
     protected $hidden = ['password', 'remember_token'];
 
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'role_verifie' => 'boolean',
     ];
 
     public function filiere(): BelongsTo

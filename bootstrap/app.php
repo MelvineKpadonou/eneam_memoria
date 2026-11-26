@@ -12,7 +12,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // 👇 Enregistrement de vos middlewares personnalisés
+        $middleware->alias([
+            'CheckStudentProfile' => \App\Http\Middleware\CheckStudentProfile::class,
+            'RedirectIfRole' => \App\Http\Middleware\RedirectIfRole::class,
+        
+            // Ajoutez d'autres middlewares ici si besoin (ex: 'role' => ...)
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

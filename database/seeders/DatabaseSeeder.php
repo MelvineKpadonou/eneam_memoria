@@ -15,11 +15,27 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // 1. On lance d'abord les référentiels de base (Filières, Années, Mots-clés)
+        // L'ordre est important car les utilisateurs ont besoin des filières.
+        $this->call([
+            AdminAutoriseSeeder::class,
+            FiliereSeeder::class,
+            MotCleSeeder::class,
+            AnneeAcademiqueSeeder::class, // Décommentez si vous l'avez créé
+        ]);
+
+        // 2. On crée les utilisateurs de test
+        // On remplace 'name' par 'nom', 'prenom', et on ajoute les champs obligatoires
 
         User::factory()->create([
-            'name' => 'Test User',
+            'nom' => 'Test',
+            'prenom' => 'User',
             'email' => 'test@example.com',
+            'role' => 'etudiant',
+            'matricule' => '12345678',
         ]);
+
+        // Vous pouvez aussi appeler votre UserSeeder personnalisé si vous en avez un
+        // $this->call(UserSeeder::class);
     }
 }

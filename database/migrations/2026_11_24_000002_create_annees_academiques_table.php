@@ -8,14 +8,15 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('annees_academiques', function (Blueprint $table) {
+        Schema::create('annee_academiques', function (Blueprint $table) {
             $table->id();
-            $table->string('libelle')->unique(); // ex : 2025-2026
+            $table->string('annee');
+            $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('annees_academiques');
+        Schema::dropIfExists('annee_academiques');
     }
 };

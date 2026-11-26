@@ -2,16 +2,15 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
+use App\Models\Filiere;
+use Illuminate\Database\Seeder; // Assurez-vous que le modèle existe
 
 class FiliereSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        //
+        Filiere::create(['nom' => 'Informatique de Gestion', 'code' => 'IG']);
+        Filiere::create(['nom' => 'Gestion des Banques et Assurances', 'code' => 'GBA']);
+        Filiere::create(['nom' => 'Statistique', 'code' => 'STAT']);
     }
 }

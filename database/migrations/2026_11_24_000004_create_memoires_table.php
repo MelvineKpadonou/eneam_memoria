@@ -23,7 +23,7 @@ return new class extends Migration
             $table->foreignId('auteur_id')->constrained('users')->restrictOnDelete();
             $table->foreignId('encadreur_id')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('filiere_id')->constrained('filieres')->restrictOnDelete();
-            $table->foreignId('annee_academique_id')->constrained('annees_academiques')->restrictOnDelete();
+            $table->foreignId('annee_academique_id')->constrained('annee_academiques')->restrictOnDelete();
 
             $table->timestamps();
         });
