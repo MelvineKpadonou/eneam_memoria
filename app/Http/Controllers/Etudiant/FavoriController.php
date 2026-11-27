@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Etudiant;
 
 use App\Models\Favori;
 use App\Models\Memoire;

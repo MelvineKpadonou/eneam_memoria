@@ -16,7 +16,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'CheckStudentProfile' => \App\Http\Middleware\CheckStudentProfile::class,
             'RedirectIfRole' => \App\Http\Middleware\RedirectIfRole::class,
-        
+            'role' => \App\Http\Middleware\RoleMiddleware::class,
+
             // Ajoutez d'autres middlewares ici si besoin (ex: 'role' => ...)
         ]);
     })

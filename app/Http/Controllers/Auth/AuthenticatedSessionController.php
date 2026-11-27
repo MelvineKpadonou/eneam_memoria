@@ -40,7 +40,7 @@ class AuthenticatedSessionController extends Controller
         }
 
         // Étudiant (auteur ou lecteur) → welcome
-        return redirect()->intended(route('welcome', absolute: false));
+        return redirect()->intended(route('welcome'));
     }
 
     /**
